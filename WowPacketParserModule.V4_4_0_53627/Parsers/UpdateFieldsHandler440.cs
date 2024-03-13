@@ -2660,6 +2660,10 @@ namespace WowPacketParserModule.V4_4_0_53627.UpdateFields.V4_4_0_53627
             for (var i = 0; i < 8; ++i)
             {
                 data.DataFlags[i].Resize(packet.ReadUInt32());
+                for (var j = 0; j < data.DataFlags[i].Count; ++j)
+                {
+                    data.DataFlags[i][j] = packet.ReadUInt64("DataFlags", indexes, i, j);
+                }
             }
             for (var i = 0; i < 2; ++i)
             {
@@ -2788,7 +2792,7 @@ namespace WowPacketParserModule.V4_4_0_53627.UpdateFields.V4_4_0_53627
             data.TransportServerTime = packet.ReadInt32("TransportServerTime", indexes);
             data.TraitConfigs.Resize(packet.ReadUInt32());
             data.ActiveCombatTraitConfigID = packet.ReadUInt32("ActiveCombatTraitConfigID", indexes);
-            for (var i = 0; i < 6; ++i)
+            for (var i = 0; i < 9; ++i)
             {
                 data.GlyphSlots[i] = packet.ReadUInt32("GlyphSlots", indexes, i);
                 data.Glyphs[i] = packet.ReadUInt32("Glyphs", indexes, i);
@@ -2798,13 +2802,6 @@ namespace WowPacketParserModule.V4_4_0_53627.UpdateFields.V4_4_0_53627
             data.CategoryCooldownMods.Resize(packet.ReadUInt32());
             data.WeeklySpellUses.Resize(packet.ReadUInt32());
             data.NumStableSlots = packet.ReadByte("NumStableSlots", indexes);
-            for (var i = 0; i < 8; ++i)
-            {
-                for (var j = 0; j < data.DataFlags[i].Count; ++j)
-                {
-                    data.DataFlags[i][j] = packet.ReadUInt64("DataFlags", indexes, i, j);
-                }
-            }
             for (var i = 0; i < data.KnownTitles.Count; ++i)
             {
                 data.KnownTitles[i] = packet.ReadUInt64("KnownTitles", indexes, i);
@@ -2920,6 +2917,32 @@ namespace WowPacketParserModule.V4_4_0_53627.UpdateFields.V4_4_0_53627
                 if (changesMask[3])
                 {
                     data.KnownTitles.ReadUpdateMask(packet);
+                }
+            }
+            if (changesMask[20])
+            {
+                for (var i = 0; i < 8; ++i)
+                {
+                    if (changesMask[21])
+                    {
+                        data.DataFlags[i].ReadUpdateMask(packet);
+                    }
+                }
+            }
+            if (changesMask[20])
+            {
+                for (var i = 0; i < 8; ++i)
+                {
+                    if (changesMask[21])
+                    {
+                        for (var j = 0; j < data.DataFlags[i].Count; ++j)
+                        {
+                            if (data.DataFlags[i].UpdateMask[j])
+                            {
+                                data.DataFlags[i][j] = packet.ReadUInt64("DataFlags", indexes, i, j);
+                            }
+                        }
+                    }
                 }
             }
             if (changesMask[22])
@@ -3066,32 +3089,6 @@ namespace WowPacketParserModule.V4_4_0_53627.UpdateFields.V4_4_0_53627
                 if (changesMask[19])
                 {
                     data.WeeklySpellUses.ReadUpdateMask(packet);
-                }
-            }
-            if (changesMask[20])
-            {
-                for (var i = 0; i < 8; ++i)
-                {
-                    if (changesMask[21])
-                    {
-                        data.DataFlags[i].ReadUpdateMask(packet);
-                    }
-                }
-            }
-            if (changesMask[20])
-            {
-                for (var i = 0; i < 8; ++i)
-                {
-                    if (changesMask[21])
-                    {
-                        for (var j = 0; j < data.DataFlags[i].Count; ++j)
-                        {
-                            if (data.DataFlags[i].UpdateMask[j])
-                            {
-                                data.DataFlags[i][j] = packet.ReadUInt64("DataFlags", indexes, i, j);
-                            }
-                        }
-                    }
                 }
             }
             packet.ResetBitReader();
@@ -3807,13 +3804,13 @@ namespace WowPacketParserModule.V4_4_0_53627.UpdateFields.V4_4_0_53627
             }
             if (changesMask[1350])
             {
-                for (var i = 0; i < 6; ++i)
+                for (var i = 0; i < 9; ++i)
                 {
                     if (changesMask[1351 + i])
                     {
                         data.GlyphSlots[i] = packet.ReadUInt32("GlyphSlots", indexes, i);
                     }
-                    if (changesMask[1357 + i])
+                    if (changesMask[1360 + i])
                     {
                         data.Glyphs[i] = packet.ReadUInt32("Glyphs", indexes, i);
                     }
