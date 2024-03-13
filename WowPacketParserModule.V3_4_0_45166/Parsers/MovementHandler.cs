@@ -198,7 +198,8 @@ namespace WowPacketParserModule.V3_4_0_45166.Parsers
         {
             PacketMonsterMove monsterMove = packet.Holder.MonsterMove;
             monsterMove.Id = packet.ReadUInt32("Id", indexes);
-            monsterMove.Destination = packet.ReadVector3("Destination", indexes);
+            if (ClientVersion.RemovedInVersion(ClientBranch.Cata, ClientVersionBuild.V4_4_0_53627))
+                monsterMove.Destination = packet.ReadVector3("Destination", indexes);
 
             packet.ResetBitReader();
 
